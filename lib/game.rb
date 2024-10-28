@@ -7,7 +7,6 @@ class Game
   def initialize(wrong_guess_limit = 7)
     @dictionary = create_dictionary('google-10000-english-no-swears.txt')
     @secret_word = select_secret_word.split('')
-    @wrong_guesses = 0
     @wrong_guess_limit = wrong_guess_limit
     @not_in_sw = []
     @letters_solved = Array.new(secret_word.length, '_')
@@ -42,6 +41,16 @@ class Game
       @letters_solved[i] = @guess if secret_letter == @guess
     end
   end
+
+  def display_round_results
+    puts @letters_solved.join(' ')
+    puts "Incorrect guesses: #{@not_in_sw.join(', ')}"
+    puts "You have #{wrong_guesses_left} incorrect guesses left"
+  end
+
+  def wrong_guesses_left
+    @wrong_guess_limit - @not_in_sw.length
+  end
 end
 
 game = Game.new
@@ -53,5 +62,4 @@ game.get_guess
 p game.guess
 game.allocate_guess
 
-p game.letters_solved
-p game.not_in_sw
+game.display_round_results
