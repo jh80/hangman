@@ -51,15 +51,27 @@ class Game
   def wrong_guesses_left
     @wrong_guess_limit - @not_in_sw.length
   end
+
+  def play_round
+    get_guess
+    allocate_guess
+    display_round_results
+  end
+
+  def play
+    puts @letters_solved.join(' ')
+    loop do
+      if @secret_word == @letters_solved
+        puts "You did it! the word was #{@secret_word.join}! You solved it with #{wrong_guesses_left} incorrect guesses to spare"
+        break
+      elsif wrong_guesses_left.zero?
+        puts "Dang! You ran out of guesses. The word was #{@secret_word.join}"
+        break
+      end
+      play_round
+    end
+  end
 end
 
 game = Game.new
-p game.secret_word
-p game.wrong_guess_limit
-p game.letters_solved
-
-game.get_guess
-p game.guess
-game.allocate_guess
-
-game.display_round_results
+game.play
