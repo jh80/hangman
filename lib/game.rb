@@ -24,8 +24,18 @@ class Game
   end
 
   def get_guess
-    puts 'What letter would you like to guess?'
-    @guess = gets.chomp[0]
+    loop do
+      puts 'What letter would you like to guess?'
+      @guess = gets.chomp[0]
+      break unless already_guessed?
+    end
+  end
+
+  def already_guessed?
+    return unless @not_in_sw.include?(@guess) || @letters_solved.include?(@guess)
+
+    puts 'You already guessed that, best not to guess it again :)'
+    true
   end
 
   def allocate_guess
