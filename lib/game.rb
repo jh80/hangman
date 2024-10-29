@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require '~/repos/hangman/lib/printable'
+require 'yaml'
 
 # Tracks and controls game state
 class Game
@@ -84,6 +85,50 @@ class Game
         break
       end
       play_round
+      save_game
+    end
+  end
+
+  def save_game
+    puts 'What would you like to name the game?'
+    file_name = gets.chomp
+    make_game_file(file_name)
+  end
+
+  def to_yaml
+    YAML.dump(self)
+  end
+
+  def to_yaml_hash
+    YAML.dump({
+                secret_word: @secret_word,
+                wrong_guess_limit: @wrong_guess_limit,
+                not_in_sw: @not_in_sw,
+                letters_solved: @letters_solved
+              })
+  end
+
+  def self.from_yaml_hash(string)
+    data = YAML.load string
+    p data
+    load_data(data[:secret_word], data[:wrong_guess_limit], data[:not_in_sw], data[:letters_solved])
+  end
+
+  def self.load_data(secret_word, wrong_guess_limit, not_in_sw, letters_solved)
+    game = new(wrong_guess_limit)
+    game.secret_word = secret_word
+    game.not_in_sw = not_in_sw
+    game.letters_solved = letters_solved
+    game
+  end
+
+  def make_game_file(file_name)
+    Dir.mkdir('saved_games') unless Dir.exist?('saved_games')
+
+    filename = "saved_games/#{file_name}.yaml"
+
+    File.open(filename, 'w') do |file|
+      file.puts to_yaml_hash
     end
   end
 end
