@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
+require '~/repos/hangman/lib/printable'
+
 # Tracks and controls game state
 class Game
+  include Printable
+
   attr_reader :secret_word, :wrong_guess_limit, :letters_solved, :guess, :not_in_sw
 
   def initialize(wrong_guess_limit = 7)
@@ -54,7 +58,8 @@ class Game
 
   def display_round_results
     puts @letters_solved.join(' ')
-    puts "Incorrect guesses: #{@not_in_sw.join(', ')}"
+    print_box(@not_in_sw)
+    # puts "Incorrect guesses: #{@not_in_sw.join(', ')}"
     puts "You have #{wrong_guesses_left} incorrect guesses left"
   end
 
