@@ -30,7 +30,7 @@ class Game
   def get_guess
     loop do
       puts 'What letter would you like to guess?'
-      @guess = gets.chomp[0]
+      @guess = gets.chomp[0].downcase
       break unless already_guessed?
     end
   end
@@ -58,8 +58,8 @@ class Game
 
   def display_round_results
     puts @letters_solved.join(' ')
-    print_box(@not_in_sw)
-    # puts "Incorrect guesses: #{@not_in_sw.join(', ')}"
+    # print_box(@not_in_sw)
+    puts "Incorrect guesses: #{@not_in_sw.join(', ')}"
     puts "You have #{wrong_guesses_left} incorrect guesses left"
   end
 
