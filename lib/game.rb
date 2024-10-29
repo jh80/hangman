@@ -85,7 +85,19 @@ class Game
         break
       end
       play_round
-      save_game
+      if save?
+        save_game
+        break
+      end
+    end
+  end
+
+  def save?
+    loop do
+      puts 'Would you like to save your game? Y or N'
+      answer = gets.chomp
+      return true if answer[0].downcase == 'y'
+      return false if answer[0].downcase == 'n'
     end
   end
 
