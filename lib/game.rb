@@ -31,8 +31,9 @@ class Game
 
   def get_guess
     loop do
-      puts 'What letter would you like to guess?'
-      @guess = gets.chomp[0].downcase
+      puts 'What letter would you like to guess? (type: save , if you would like to save)'
+      guess = gets.chomp.downcase
+      @guess = guess == 'save' ? guess : guess[0]
       break unless already_guessed?
     end
   end
@@ -45,7 +46,9 @@ class Game
   end
 
   def allocate_guess
-    if @secret_word.include?(@guess)
+    if save?
+      save_game
+    elsif @secret_word.include?(@guess)
       add_solved_letter
     else
       @not_in_sw << @guess
@@ -72,6 +75,8 @@ class Game
   def play_round
     get_guess
     allocate_guess
+    return if save?
+
     display_round_results
   end
 
@@ -84,22 +89,16 @@ class Game
       elsif wrong_guesses_left.zero?
         puts "Dang! You ran out of guesses. The word was #{@secret_word.join}"
         break
-      end
-      play_round
-      if save?
-        save_game
+      elsif save?
+        puts 'See you later!'
         break
       end
+      play_round
     end
   end
 
   def save?
-    loop do
-      puts 'Would you like to save your game? Y or N'
-      answer = gets.chomp
-      return true if answer[0].downcase == 'y'
-      return false if answer[0].downcase == 'n'
-    end
+    @guess == 'save'
   end
 
   def save_game
