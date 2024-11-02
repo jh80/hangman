@@ -1,0 +1,23 @@
+---
+:secret_word:
+- i
+- "n"
+- j
+- u
+- r
+- e
+- d
+:wrong_guess_limit: 7
+:not_in_sw:
+- a
+- t
+- s
+- l
+:letters_solved:
+- _
+- "n"
+- _
+- _
+- r
+- e
+- d

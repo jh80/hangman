@@ -7,7 +7,8 @@ require 'yaml'
 class Game
   include Printable
 
-  attr_reader :secret_word, :wrong_guess_limit, :letters_solved, :guess, :not_in_sw
+  attr_accessor :secret_word, :not_in_sw, :letters_solved
+  attr_reader :wrong_guess_limit, :guess
 
   def initialize(wrong_guess_limit = 7)
     @dictionary = create_dictionary('google-10000-english-no-swears.txt')
@@ -75,7 +76,7 @@ class Game
   end
 
   def play
-    puts @letters_solved.join(' ')
+    display_round_results
     loop do
       if @secret_word == @letters_solved
         puts "You did it! the word was #{@secret_word.join}! You solved it with #{wrong_guesses_left} incorrect guesses to spare"
@@ -107,9 +108,9 @@ class Game
     make_game_file(file_name)
   end
 
-  def to_yaml
-    YAML.dump(self)
-  end
+  # def to_yaml
+  #   YAML.dump(self)
+  # end
 
   def to_yaml_hash
     YAML.dump({
@@ -122,7 +123,6 @@ class Game
 
   def self.from_yaml_hash(string)
     data = YAML.load string
-    p data
     load_data(data[:secret_word], data[:wrong_guess_limit], data[:not_in_sw], data[:letters_solved])
   end
 
@@ -144,6 +144,3 @@ class Game
     end
   end
 end
-
-game = Game.new
-game.play
